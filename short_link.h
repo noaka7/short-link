@@ -1,8 +1,13 @@
 #ifndef SHORT_LINK_H
 #define SHORT_LINK_H
 
+#include <exception>
 #include <string>
 #include <unordered_map>
+
+struct insert_exception : public std::exception {
+  const char *what() const throw() { return "Insertion failed!"; }
+};
 
 class short_link {
 public:

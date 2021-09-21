@@ -10,7 +10,7 @@ std::string short_link::encode(std::string url) {
   auto res = short_link::db.insert({short_url, url});
   std::cout << "encode insert: " << res.second << std::endl;
   if (!res.second) {
-    short_url = "";
+    throw insert_exception();
   }
   return short_url;
 }
@@ -30,8 +30,20 @@ std::string short_link::decode(std::string short_url) {
 int main() {
   std::string url = "abc";
   std::cout << "main url: " << url << std::endl;
-  std::string short_url = short_link::encode(url);
+  std::string short_url;
+  try {
+    short_url = short_link::encode(url);
+  } catch (insert_exception &e) {
+    std::cout << "main insertion exception: " << e.what() << std::endl;
+  }
   std::cout << "main encode: " << short_url << std::endl;
+
+  // expected failure
+  try {
+    short_url = short_link::encode(url);
+  } catch (insert_exception &e) {
+    std::cout << "main insertion exception: " << e.what() << std::endl;
+  }
 
   // auto res = short_link::db.find(short_url);
   // if (short_link::db.end() == res) {
