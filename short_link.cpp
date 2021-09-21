@@ -28,7 +28,17 @@ std::string encode(std::string url) {
  * @return Original URL
  */
 
-std::string decode(std::string short_url) { return ""; }
+std::string decode(std::string short_url) {
+  std::string ans = "";
+  auto res = db.find(short_url);
+  if (db.end() == res) {
+    std::cout << "decode: not found" << std::endl;
+  } else {
+    ans = res->second;
+    std::cout << "decode: found " << ans << std::endl;
+  }
+  return ans;
+}
 
 int main() {
   std::string url = "abc";
@@ -42,6 +52,9 @@ int main() {
   } else {
     std::cout << "main found: " << res->second << std::endl;
   }
+
+  std::string decoded = decode(short_url);
+  std::cout << "main decoded == url: " << (decoded == url) << std::endl;
 
   return 0;
 }
