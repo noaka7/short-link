@@ -1,20 +1,13 @@
+#include "short_link.h"
 #include <iostream>
-#include <string>
-#include <unordered_map>
 
-std::unordered_map<std::string, std::string> db;
+std::unordered_map<std::string, std::string> short_link::db = {};
 
-/**
- * Encodes a URL to a shortened URL
- * @param url URL
- * @return Shortened URL
- */
-
-std::string encode(std::string url) {
+std::string short_link::encode(std::string url) {
   std::string short_url;
   short_url = std::to_string(std::hash<std::string>{}(url));
   //   std::cout << "encode short_url: " << short_url << std::endl;
-  auto res = db.insert({short_url, url});
+  auto res = short_link::db.insert({short_url, url});
   std::cout << "encode insert: " << res.second << std::endl;
   if (!res.second) {
     short_url = "";
@@ -22,16 +15,10 @@ std::string encode(std::string url) {
   return short_url;
 }
 
-/**
- * Decodes a shortened URL to its original URL
- * @param url URL
- * @return Original URL
- */
-
-std::string decode(std::string short_url) {
+std::string short_link::decode(std::string short_url) {
   std::string ans = "";
-  auto res = db.find(short_url);
-  if (db.end() == res) {
+  auto res = short_link::db.find(short_url);
+  if (short_link::db.end() == res) {
     std::cout << "decode: not found" << std::endl;
   } else {
     ans = res->second;
@@ -43,17 +30,17 @@ std::string decode(std::string short_url) {
 int main() {
   std::string url = "abc";
   std::cout << "main url: " << url << std::endl;
-  std::string short_url = encode(url);
+  std::string short_url = short_link::encode(url);
   std::cout << "main encode: " << short_url << std::endl;
 
-  auto res = db.find(short_url);
-  if (db.end() == res) {
-    std::cout << "main not found" << std::endl;
-  } else {
-    std::cout << "main found: " << res->second << std::endl;
-  }
+  // auto res = short_link::db.find(short_url);
+  // if (short_link::db.end() == res) {
+  //   std::cout << "main not found" << std::endl;
+  // } else {
+  //   std::cout << "main found: " << res->second << std::endl;
+  // }
 
-  std::string decoded = decode(short_url);
+  std::string decoded = short_link::decode(short_url);
   std::cout << "main decoded == url: " << (decoded == url) << std::endl;
 
   return 0;
