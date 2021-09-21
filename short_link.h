@@ -12,6 +12,11 @@ struct insert_exception : public std::exception {
 class short_link {
 public:
   /**
+   * Initializes module short link
+   */
+  static void init();
+
+  /**
    * Encodes a URL to a shortened URL
    * @param url URL
    * @return Shortened URL
