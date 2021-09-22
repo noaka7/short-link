@@ -1,6 +1,7 @@
 #ifndef SHORT_LINK_H
 #define SHORT_LINK_H
 
+#include "rapidjson/document.h"
 #include <exception>
 #include <string>
 #include <unordered_map>
@@ -19,9 +20,9 @@ public:
   /**
    * Encodes a URL to a shortened URL
    * @param url URL
-   * @return Shortened URL
+   * @return JSON with shortened URL and URL as key-value pair
    */
-  static std::string encode(std::string);
+  static rapidjson::Value encode(std::string);
 
   /**
    * Decodes a shortened URL to its original URL
@@ -31,6 +32,7 @@ public:
   static std::string decode(std::string);
 
 private:
+  static rapidjson::Document document;
   static std::unordered_map<std::string, std::string> db;
 };
 

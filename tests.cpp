@@ -7,28 +7,38 @@ void test_setup(void) { short_link::init(); }
 void test_teardown(void) {}
 
 MU_TEST(test_encode_fail) {
-  std::string encoded = "";
+  rapidjson::Value json;
   try {
-    encoded = short_link::encode("abc");
+    json = short_link::encode("abc");
   } catch (insert_exception &e) {
     std::cerr << e.what() << std::endl;
   }
   try {
-    encoded = short_link::encode("abc");
+    json = short_link::encode("abc");
   } catch (insert_exception &e) {
     std::cerr << e.what() << std::endl;
   }
-  mu_assert_string_eq("3663726644998027833", encoded.c_str());
+  mu_check(!json.ObjectEmpty());
+  auto it = json.MemberBegin();
+  mu_check(it->name.IsString());
+  mu_assert_string_eq("3663726644998027833", it->name.GetString());
+  mu_check(it->value.IsString());
+  mu_assert_string_eq("abc", it->value.GetString());
 }
 
 MU_TEST(test_encode) {
-  std::string encoded;
+  rapidjson::Value json;
   try {
-    encoded = short_link::encode("abc");
+    json = short_link::encode("abc");
   } catch (insert_exception &e) {
     std::cerr << e.what() << std::endl;
   }
-  mu_assert_string_eq("3663726644998027833", encoded.c_str());
+  mu_check(!json.ObjectEmpty());
+  auto it = json.MemberBegin();
+  mu_check(it->name.IsString());
+  mu_assert_string_eq("3663726644998027833", it->name.GetString());
+  mu_check(it->value.IsString());
+  mu_assert_string_eq("abc", it->value.GetString());
 }
 
 MU_TEST(test_decode_fail) {
@@ -36,13 +46,18 @@ MU_TEST(test_decode_fail) {
 }
 
 MU_TEST(test_decode) {
-  std::string encoded;
+  rapidjson::Value json;
   try {
-    encoded = short_link::encode("abc");
+    json = short_link::encode("abc");
   } catch (insert_exception &e) {
     std::cerr << e.what() << std::endl;
   }
-  mu_assert_string_eq("3663726644998027833", encoded.c_str());
+  mu_check(!json.ObjectEmpty());
+  auto it = json.MemberBegin();
+  mu_check(it->name.IsString());
+  mu_assert_string_eq("3663726644998027833", it->name.GetString());
+  mu_check(it->value.IsString());
+  mu_assert_string_eq("abc", it->value.GetString());
   mu_assert_string_eq("abc", short_link::decode("3663726644998027833").c_str());
 }
 
