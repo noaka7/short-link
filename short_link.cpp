@@ -55,10 +55,10 @@ std::string short_link::id_to_short_url(long long id) {
   std::string short_url;
 
   // Convert given integer ID to a base 62 number
-  while (id) {
+  do {
     short_url.push_back(alphabet[id % 62]);
     id /= 62;
-  }
+  } while (id);
 
   // Reverse short URL to complete base conversion
   reverse(short_url.begin(), short_url.end());
