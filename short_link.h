@@ -34,6 +34,20 @@ public:
 private:
   static rapidjson::Document document;
   static std::unordered_map<std::string, std::string> db;
+
+  /**
+   * Generates a short URL from integer ID
+   * @param id ID
+   * @return Short URL
+   */
+  static std::string id_to_short_url(long long);
+
+  /**
+   * Get integer ID from a short URL
+   * @param short_url Short URL
+   * @return Integer ID
+   */
+  static long long short_url_to_id(std::string);
 };
 
 #endif /* SHORT_LINK_H */
