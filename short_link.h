@@ -4,7 +4,8 @@
 #include "rapidjson/document.h"
 #include <exception>
 #include <string>
-#include <unordered_map>
+#include <utility>
+#include <vector>
 
 struct insert_exception : public std::exception {
   const char *what() const throw() { return "Insertion failed!"; }
@@ -33,7 +34,8 @@ public:
 
 private:
   static rapidjson::Document document;
-  static std::unordered_map<std::string, std::string> db;
+  static std::vector<std::pair<std::string, std::string>> db;
+  static long long id;
 
   /**
    * Generates a short URL from integer ID

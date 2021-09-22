@@ -1,19 +1,23 @@
 #include "short_link.h"
 #include <algorithm>
+#include <iostream>
 
 rapidjson::Document short_link::document;
-std::unordered_map<std::string, std::string> short_link::db = {};
+std::vector<std::pair<std::string, std::string>> short_link::db = {};
+long long short_link::id = 0;
 
-void short_link::init() { short_link::db.clear(); }
+void short_link::init() {
+  short_link::db.clear();
+  short_link::id = 0;
+}
 
 rapidjson::Value short_link::encode(std::string url) {
   rapidjson::Value json(rapidjson::kObjectType);
 
-  std::string short_url = std::to_string(std::hash<std::string>{}(url));
-  auto res = short_link::db.insert({short_url, url});
-  if (!res.second) {
-    throw insert_exception();
-  }
+  std::string short_url = short_link::id_to_short_url(short_link::id);
+  auto it = short_link::db.begin();
+  short_link::db.insert(it + short_link::id, {short_url, url});
+  short_link::id++;
 
   rapidjson::Value key(short_url.c_str(), short_link::document.GetAllocator());
   rapidjson::Value value(url.c_str(), short_link::document.GetAllocator());
@@ -25,14 +29,18 @@ rapidjson::Value short_link::encode(std::string url) {
 rapidjson::Value short_link::decode(std::string short_url) {
   rapidjson::Value json(rapidjson::kObjectType);
 
-  auto res = short_link::db.find(short_url);
-  if (short_link::db.end() != res) {
-    std::string url = res->second;
-    rapidjson::Value key(short_url.c_str(),
-                         short_link::document.GetAllocator());
-    rapidjson::Value value(url.c_str(), short_link::document.GetAllocator());
-    json.AddMember(key, value, short_link::document.GetAllocator());
+  long long id = short_link::short_url_to_id(short_url);
+  std::pair<std::string, std::string> res;
+  try {
+    res = short_link::db.at(id);
+  } catch (std::out_of_range &oor) {
+    std::cerr << oor.what() << std::endl;
   }
+  std::string url = res.second;
+
+  rapidjson::Value key(short_url.c_str(), short_link::document.GetAllocator());
+  rapidjson::Value value(url.c_str(), short_link::document.GetAllocator());
+  json.AddMember(key, value, short_link::document.GetAllocator());
 
   return json;
 }
