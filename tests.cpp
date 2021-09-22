@@ -42,23 +42,32 @@ MU_TEST(test_encode) {
 }
 
 MU_TEST(test_decode_fail) {
-  mu_assert_string_eq("", short_link::decode("abc").c_str());
+  rapidjson::Value json = short_link::decode("abc");
+  mu_check(json.ObjectEmpty());
 }
 
 MU_TEST(test_decode) {
-  rapidjson::Value json;
+  rapidjson::Value encoded;
+  rapidjson::Value decoded;
   try {
-    json = short_link::encode("abc");
+    encoded = short_link::encode("abc");
   } catch (insert_exception &e) {
     std::cerr << e.what() << std::endl;
   }
-  mu_check(!json.ObjectEmpty());
-  auto it = json.MemberBegin();
+  mu_check(!encoded.ObjectEmpty());
+  auto it = encoded.MemberBegin();
   mu_check(it->name.IsString());
   mu_assert_string_eq("3663726644998027833", it->name.GetString());
   mu_check(it->value.IsString());
   mu_assert_string_eq("abc", it->value.GetString());
-  mu_assert_string_eq("abc", short_link::decode("3663726644998027833").c_str());
+
+  decoded = short_link::decode("3663726644998027833");
+  mu_check(!decoded.ObjectEmpty());
+  it = decoded.MemberBegin();
+  mu_check(it->name.IsString());
+  mu_assert_string_eq("3663726644998027833", it->name.GetString());
+  mu_check(it->value.IsString());
+  mu_assert_string_eq("abc", it->value.GetString());
 }
 
 MU_TEST_SUITE(test_suite) {

@@ -27,9 +27,9 @@ public:
   /**
    * Decodes a shortened URL to its original URL
    * @param url URL
-   * @return Original URL
+   * @return JSON with shortened URL and original URL as key-value pair
    */
-  static std::string decode(std::string);
+  static rapidjson::Value decode(std::string);
 
 private:
   static rapidjson::Document document;

@@ -21,11 +21,17 @@ rapidjson::Value short_link::encode(std::string url) {
   return json;
 }
 
-std::string short_link::decode(std::string short_url) {
-  std::string ans = "";
+rapidjson::Value short_link::decode(std::string short_url) {
+  rapidjson::Value json(rapidjson::kObjectType);
+
   auto res = short_link::db.find(short_url);
   if (short_link::db.end() != res) {
-    ans = res->second;
+    std::string url = res->second;
+    rapidjson::Value key(short_url.c_str(),
+                         short_link::document.GetAllocator());
+    rapidjson::Value value(url.c_str(), short_link::document.GetAllocator());
+    json.AddMember(key, value, short_link::document.GetAllocator());
   }
-  return ans;
+
+  return json;
 }
