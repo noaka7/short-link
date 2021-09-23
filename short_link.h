@@ -2,14 +2,9 @@
 #define SHORT_LINK_H
 
 #include "rapidjson/document.h"
-#include <exception>
 #include <string>
 #include <utility>
 #include <vector>
-
-struct insert_exception : public std::exception {
-  const char *what() const throw() { return "Insertion failed!"; }
-};
 
 class short_link {
 public:
