@@ -38,9 +38,12 @@ rapidjson::Value short_link::decode(std::string short_url) {
   }
   std::string url = res.second;
 
-  rapidjson::Value key(short_url.c_str(), short_link::document.GetAllocator());
-  rapidjson::Value value(url.c_str(), short_link::document.GetAllocator());
-  json.AddMember(key, value, short_link::document.GetAllocator());
+  if (!url.empty()) {
+    rapidjson::Value key(short_url.c_str(),
+                         short_link::document.GetAllocator());
+    rapidjson::Value value(url.c_str(), short_link::document.GetAllocator());
+    json.AddMember(key, value, short_link::document.GetAllocator());
+  }
 
   return json;
 }
