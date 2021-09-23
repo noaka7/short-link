@@ -91,3 +91,9 @@ long long short_link::short_url_to_id(std::string short_url) {
 
   return id;
 }
+
+void short_link::test_setup() {
+  short_link::db.push_back({"a", "xyz"});
+  short_link::db.push_back({"b", "ABC"});
+  short_link::db.push_back({"c", "123"});
+}

@@ -34,6 +34,11 @@ public:
    */
   static rapidjson::Value decode(std::string);
 
+  /**
+   * Insert {"a", "abc"}, {"B", "ABC"} and {"3", "123"} in db
+   */
+  static void test_setup();
+
 private:
   static rapidjson::Document document;
   static std::vector<std::pair<std::string, std::string>> db;
