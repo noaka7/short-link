@@ -14,14 +14,17 @@ void short_link::init() {
 rapidjson::Value short_link::encode(std::string url) {
   rapidjson::Value json(rapidjson::kObjectType);
 
-  std::string short_url = short_link::id_to_short_url(short_link::id);
-  auto it = short_link::db.begin();
-  short_link::db.insert(it + short_link::id, {short_url, url});
-  short_link::id++;
+  if (!url.empty()) {
+    std::string short_url = short_link::id_to_short_url(short_link::id);
+    auto it = short_link::db.begin();
+    short_link::db.insert(it + short_link::id, {short_url, url});
+    short_link::id++;
 
-  rapidjson::Value key(short_url.c_str(), short_link::document.GetAllocator());
-  rapidjson::Value value(url.c_str(), short_link::document.GetAllocator());
-  json.AddMember(key, value, short_link::document.GetAllocator());
+    rapidjson::Value key(short_url.c_str(),
+                         short_link::document.GetAllocator());
+    rapidjson::Value value(url.c_str(), short_link::document.GetAllocator());
+    json.AddMember(key, value, short_link::document.GetAllocator());
+  }
 
   return json;
 }

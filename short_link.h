@@ -22,6 +22,7 @@ public:
    * Encodes a URL to a shortened URL
    * @param url URL
    * @return JSON with shortened URL and URL as key-value pair
+   *          Empty if url is not valid
    */
   static rapidjson::Value encode(std::string);
 
