@@ -49,7 +49,7 @@ private:
   /**
    * Get integer ID from a short URL
    * @param short_url Short URL
-   * @return Integer ID
+   * @return Integer ID. Return -1 if short_url is empty
    */
   static long long short_url_to_id(std::string);
 };

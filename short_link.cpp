@@ -73,6 +73,10 @@ std::string short_link::id_to_short_url(long long id) {
 }
 
 long long short_link::short_url_to_id(std::string short_url) {
+  if (short_url.empty()) {
+    return -1;
+  }
+
   long long id = 0;
 
   for (auto it = short_url.begin(); it != short_url.end(); ++it) {
